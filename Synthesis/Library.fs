@@ -1,5 +1,8 @@
 ﻿module Synthesis
 
+open System.Diagnostics
+open System.Diagnostics
+
 let abelar x =
     match x > 12 && x < 3097 && (x % 12) = 0 with
     | true -> true
@@ -96,13 +99,44 @@ let bizFuzz n =
     countDiv 1 0 0 0
 
 let monthDay d y =
-    match isLeap y with
-    | true -> 
-        match month (d/30) with
-        | m, day -> m
-    | false ->
-         match month (d/30) with
-            | m, day -> m
+   match isLeap y with
+   | true ->
+        match d <= 0 || d > 366 with
+        | true -> failwith "Nooooooooo"
+        | false ->
+            let rec daysToMonth month_counter month_name acc =
+                match acc >= d with
+                | true -> month_name
+                | false -> 
+                    match month (month_counter) with
+                    | "February", day -> daysToMonth (month_counter + 1) "February" (acc + day + 1)
+                    | m, day -> daysToMonth (month_counter + 1) m (acc + day)
+            daysToMonth 1 "January" 0
+   | false ->
+      match d <= 0 || d > 365 with
+        | true -> failwith "Nooooooooo"
+        | false -> 
+            let rec daysToMonth month_counter month_name acc =
+                match acc >= d with
+                | true -> month_name
+                | false -> 
+                    match month (month_counter) with
+                    | m, day -> daysToMonth (month_counter + 1) m (acc + day)
+            daysToMonth 1 "January" 0
 
-let coord _ =
-    failwith "Not implemented"
+let sqrt n =
+    match n <= 0.0 with
+    | true -> failwith "Invalid input"
+    | _ ->
+        let rec calc guess i =
+            match i with
+            | 10 -> guess
+            | _ -> 
+                let g = (guess + n/guess) / 2.0
+                calc g (i + 1)
+        calc (n/2.0) 0
+
+let coord (x,y) =
+
+   failwith ""  
+    
