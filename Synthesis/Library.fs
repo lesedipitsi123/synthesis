@@ -136,7 +136,14 @@ let sqrt n =
                 calc g (i + 1)
         calc (n/2.0) 0
 
-let coord (x,y) =
-
-   failwith ""  
+let coord (x, y) =
+    let dist  = fun (x2, y2) -> (x - x2) * (x - x2) + (y - y2) * (y - y2) |> sqrt
+    let rec_coord = fun (x2, y2) w h -> 
+                        let (s1, t1) = min (x2, y2) (x, y) // Get Topleft  (i.e first vertex)
+                        let (s2, t2) = ((s1 + w), t1) // second vertex
+                        let (s3, t3) = (s1, (t1 + h)) // third vertex
+                        let (s4, t4) = ((s1 + w), (t1 + h)) // fourth vertex
+                        (x, y) >= (s1, t1) && (x, y) >= (s3, t3) && (x, y) <= (s2, t2) && (x, y) <= (s4, t4)
+    dist, rec_coord                
+        
     
